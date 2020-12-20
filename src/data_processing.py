@@ -27,13 +27,14 @@ def remove_emoji(text):
     return re.sub("\[.{0,12}\]","", text).replace(u'\xa0', u' ').replace(' )', '')
 
 def remove_punctuation(text):
-    return re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……&*（#&$><]+", "", text)\
+    return re.sub("[\+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……&*（#&$><)-]+", "", text)
 
 def sent_tokenziation(text):
     return "\n".join(sent_tokenize(text, keep_whitespace=False))
 
 def word_tokenization(text):
-    return " ".join(word_tokenize(normalize(text), keep_whitespace=False))
+    tokenized = " ".join(word_tokenize(normalize(text), keep_whitespace=False))
+    return tokenized
 
 def pre_process(text):
     res = remove_url(text)
@@ -42,6 +43,10 @@ def pre_process(text):
     res = remove_number(res)
     res = remove_emoji(res)
     res = remove_punctuation(res)
+    # res = res.replace(" ", "")
+    res = res.replace("\n", "")
+    res = res.replace("\r", "")
+    res = res.replace("\t", "")
     return res
 
 def create_traindata(input_path, output_path):
